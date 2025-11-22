@@ -386,10 +386,61 @@
         border-top: 1px solid var(--line);
     }
 
+    .page-nav {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 10px;
+        margin: 12px 0 26px;
+        position: sticky;
+        top: 72px;
+        z-index: 9;
+        background: linear-gradient(180deg, rgba(6,9,16,0.95) 0%, rgba(6,9,16,0.78) 100%);
+        backdrop-filter: blur(8px);
+        padding: 8px;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+    }
+
+    .page-tab {
+        border: 1px solid var(--line);
+        background: rgba(255,255,255,0.04);
+        color: #e9edf6;
+        border-radius: 12px;
+        padding: 12px 14px;
+        text-align: left;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        transition: all 0.18s ease;
+        font-weight: 600;
+    }
+    .page-tab small { color: var(--muted); font-weight: 500; }
+    .page-tab:hover { transform: translateY(-2px); background: rgba(255,255,255,0.08); }
+    .page-tab.active {
+        border-color: rgba(56,193,255,0.4);
+        background: linear-gradient(120deg, rgba(56,193,255,0.12), rgba(255,179,0,0.14));
+        box-shadow: 0 10px 28px rgba(0,0,0,0.25);
+    }
+
+    .page {
+        display: none;
+        animation: fadeUp 0.25s ease;
+        scroll-margin-top: 140px;
+    }
+    .page.active { display: block; }
+
+    @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(8px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
     @media (max-width: 960px) {
         header.topbar { position: static; }
         .hero-inner { grid-template-columns: 1fr; }
         .hero-card { order: -1; }
+        .page-nav { top: 0; }
+        .page { scroll-margin-top: 110px; }
     }
 
     @media (max-width: 640px) {
@@ -413,77 +464,142 @@
         </div>
     </header>
 
-    <section class="hero">
-        <div class="hero-inner">
-            <div>
-                <span class="eyebrow">Power + Carry | รองรับชาร์จเร็ว</span>
-                <h1>Volt Pack 1 — กระเป๋าอัจฉริยะที่ชาร์จโน้ตบุ๊กได้จริง</h1>
-                <p class="lede">รวมพาวเวอร์แบงก์ 99Wh, ช่อง USB-C 100W x2, ที่ชาร์จไร้สาย Qi2 และดีไซน์ที่พร้อมทำงาน-เดินทาง ทุกสายชาร์จจัดระเบียบไว้ในตัวกระเป๋า</p>
-                <div class="tags">
-                    <span class="chip">แบตเตอรี่ LiPo 26,756 mAh (99Wh)</span>
-                    <span class="chip">USB-C 100W PD x2</span>
-                    <span class="chip">Qi2 Wireless 25W</span>
-                    <span class="chip">ผ่านด่านสนามบินได้</span>
-                </div>
-                <div class="cta-row">
-                    <a class="btn primary" href="#order">แอดไลน์เพื่อสั่งซื้อ</a>
-                    <a class="btn ghost" href="#spec">ดูสเปกทั้งหมด</a>
-                </div>
-                <div class="stat-grid">
-                    <div class="stat">
-                        <strong>99 Wh</strong>
-                        <span>ขึ้นเครื่องได้ ไม่ต้องโหลดใต้ท้อง</span>
-                    </div>
-                    <div class="stat">
-                        <strong>100W x2</strong>
-                        <span>จ่ายไฟโน้ตบุ๊ก + มือถือพร้อมกัน</span>
-                    </div>
-                    <div class="stat">
-                        <strong>Qi2 25W</strong>
-                        <span>ชาร์จไร้สาย แค่วางก็ชาร์จ</span>
-                    </div>
-                </div>
-            </div>
+    <div class="page-nav" role="tablist">
+        <button class="page-tab active" data-target="overview"><span>ภาพรวม</span><small>Intro + ราคา</small></button>
+        <button class="page-tab" data-target="power"><span>พลังงาน</span><small>พอร์ต & แบต</small></button>
+        <button class="page-tab" data-target="storage"><span>การจัดเก็บ</span><small>ช่องอุปกรณ์</small></button>
+        <button class="page-tab" data-target="design"><span>ดีไซน์</span><small>กันขโมย/เดินทาง</small></button>
+        <button class="page-tab" data-target="specs"><span>สเปก</span><small>รายละเอียด</small></button>
+        <button class="page-tab" data-target="gallery"><span>แกลเลอรี</span><small>ภาพสินค้า</small></button>
+        <button class="page-tab" data-target="order"><span>สั่งซื้อ</span><small>ขั้นตอน</small></button>
+    </div>
 
-            <div class="hero-card">
-                <div class="price-row">
-                    <div class="price">3,999 บาท</div>
-                    <div class="compare">5,000</div>
-                    <span class="badge">🔥 11.11 Flash Deal</span>
+    <section class="page active" id="overview" role="tabpanel">
+        <div class="hero">
+            <div class="hero-inner">
+                <div>
+                    <span class="eyebrow">Power + Carry | รองรับชาร์จเร็ว</span>
+                    <h1>Volt Pack 1 — กระเป๋าอัจฉริยะที่ชาร์จโน้ตบุ๊กได้จริง</h1>
+                    <p class="lede">รวมพาวเวอร์แบงก์ 99Wh, ช่อง USB-C 100W x2, ที่ชาร์จไร้สาย Qi2 และดีไซน์ที่พร้อมทำงาน-เดินทาง ทุกสายชาร์จจัดระเบียบไว้ในตัวกระเป๋า</p>
+                    <div class="tags">
+                        <span class="chip">แบตเตอรี่ LiPo 26,756 mAh (99Wh)</span>
+                        <span class="chip">USB-C 100W PD x2</span>
+                        <span class="chip">Qi2 Wireless 25W</span>
+                        <span class="chip">ผ่านด่านสนามบินได้</span>
+                    </div>
+                    <div class="cta-row">
+                        <a class="btn primary" href="#order">แอดไลน์เพื่อสั่งซื้อ</a>
+                        <a class="btn ghost" href="#specs">ดูสเปกทั้งหมด</a>
+                    </div>
+                    <div class="stat-grid">
+                        <div class="stat">
+                            <strong>99 Wh</strong>
+                            <span>ขึ้นเครื่องได้ ไม่ต้องโหลดใต้ท้อง</span>
+                        </div>
+                        <div class="stat">
+                            <strong>100W x2</strong>
+                            <span>จ่ายไฟโน้ตบุ๊ก + มือถือพร้อมกัน</span>
+                        </div>
+                        <div class="stat">
+                            <strong>Qi2 25W</strong>
+                            <span>ชาร์จไร้สาย แค่วางก็ชาร์จ</span>
+                        </div>
+                    </div>
                 </div>
-                <p style="color:#dfe6f5; margin: 6px 0 12px;">ส่งฟรี EMS / เก็บเงินปลายทางเพิ่ม 80 บาท / มีสต็อกพร้อมจัดส่ง</p>
-                <ul class="hero-list">
-                    <li><div class="dot-small"></div>สาย USB-C 240W พร้อมใช้งานในกล่อง</li>
-                    <li><div class="dot-small"></div>ช่องเก็บอุปกรณ์กันกระแทก + กัน RFID</li>
-                    <li><div class="dot-small"></div>ฐานกระเป๋าเสริมยาง กันลื่น กันขีดข่วน</li>
-                    <li><div class="dot-small"></div>พอร์ตภายนอกหยิบง่าย ไม่ต้องเปิดทั้งใบ</li>
-                </ul>
-                <a class="btn primary" href="#order">รับโปรตอนนี้</a>
+
+                <div class="hero-card">
+                    <div class="price-row">
+                        <div class="price">3,999 บาท</div>
+                        <div class="compare">5,000</div>
+                        <span class="badge">🔥 11.11 Flash Deal</span>
+                    </div>
+                    <p style="color:#dfe6f5; margin: 6px 0 12px;">ส่งฟรี EMS / เก็บเงินปลายทางเพิ่ม 80 บาท / มีสต็อกพร้อมจัดส่ง</p>
+                    <ul class="hero-list">
+                        <li><div class="dot-small"></div>สาย USB-C 240W พร้อมใช้งานในกล่อง</li>
+                        <li><div class="dot-small"></div>ช่องเก็บอุปกรณ์กันกระแทก + กัน RFID</li>
+                        <li><div class="dot-small"></div>ฐานกระเป๋าเสริมยาง กันลื่น กันขีดข่วน</li>
+                        <li><div class="dot-small"></div>พอร์ตภายนอกหยิบง่าย ไม่ต้องเปิดทั้งใบ</li>
+                    </ul>
+                    <a class="btn primary" href="#order">รับโปรตอนนี้</a>
+                </div>
             </div>
         </div>
     </section>
 
-    <div class="sections">
+    <section class="page" id="power" role="tabpanel">
         <div class="section">
-            <h2>ภาพรวมการใช้งาน</h2>
-            <p>เน้นชาร์จจริง ใช้งานทุกวัน: เดินทาง ขึ้นเครื่อง ทำงานคาเฟ่ หรือประชุมลูกค้า Volt Pack 1 จ่ายไฟแรงแต่ยังผ่านข้อกำหนดสายการบิน</p>
+            <h2>พลังงาน & การชาร์จ</h2>
+            <p>พร้อมจ่ายไฟแรง ปลอดภัย ผ่านข้อกำหนดสนามบิน: USB-C 100W x2, พอร์ตด้านนอกหยิบง่าย และ Qi2 25W</p>
             <div class="grid">
                 <div class="card">
-                    <img src="https://images.unsplash.com/photo-1509762774605-f07235a08f1f?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8YmFja3BhY2t8ZW58MHx8MHx8fDA%3D" alt="ชั้นเก็บอุปกรณ์">
-                    <div class="card-body">ช่องเก็บอุปกรณ์บุฟองน้ำ แยกโน้ตบุ๊ก แท็บเล็ต สายชาร์จ และพาวเวอร์ พร้อมสาย USB-C 240W ในตัว</div>
+                    <img src="https://www.quickserv.co.th/texteditor/uploade/USBC-01(1).png" alt="พอร์ต USB-C">
+                    <div class="card-body">USB-C 100W PD สองช่อง + PD 45/15W รวม 3 ช่อง จ่ายไฟโน้ตบุ๊กและมือถือพร้อมกัน</div>
                 </div>
                 <div class="card">
-                    <img src="https://buffalojackson.com/cdn/shop/articles/rucksack-or-backpack-buffalo-jackson-blog-1.jpg?v=1601060389&width=1440" alt="พอร์ต USB-C">
-                    <div class="card-body">USB-C 100W PD สองช่อง + PD 45/15W รวม 3 ช่อง จ่ายไฟเร็ว พอร์ตด้านนอกหยิบเสียบได้เลย</div>
+                    <img src="https://cdn.shopify.com/s/files/1/0116/2015/5451/files/How_to_use_the_USB_port_built_in_the_backpack_2_480x480.webp?v=1649751607" alt="สายและพอร์ต">
+                    <div class="card-body">สาย USB-C 240W ให้ในกล่อง เสียบกับพอร์ตนอกกระเป๋าได้ทันที ไม่ต้องเปิดทั้งใบ</div>
                 </div>
                 <div class="card">
-                    <img src="https://d1nymbkeomeoqg.cloudfront.net/photos/30/9/422429_12461_L2.jpg" alt="ดีไซน์กระเป๋า">
-                    <div class="card-body">ผ้าทนละอองน้ำ เคลือบกันฝุ่น ฐานกันลื่น ซิปกันขโมย + ช่องลับหลัง พร้อมสายรัดเดินทาง</div>
+                    <img src="https://cdn.mos.cms.futurecdn.net/CQLKWo2jNX4oEJYo8znC-1200-80.jpg" alt="ชั้นชาร์จ">
+                    <div class="card-body">ช่องจัดระเบียบสายและพาวเวอร์แบงก์ในตัว วางมือถือบน Qi2 25W ได้เลย</div>
                 </div>
             </div>
+            <div class="stat-grid" style="margin-top:18px;">
+                <div class="stat"><strong>99 Wh</strong><span>ผ่านสนามบิน ไม่ต้องโหลดใต้เครื่อง</span></div>
+                <div class="stat"><strong>PD 100W</strong><span>ชาร์จ MacBook/Ultrabook เต็มสปีด</span></div>
+                <div class="stat"><strong>Qi2 25W</strong><span>ชาร์จไร้สาย แค่วางก็ชาร์จ</span></div>
+            </div>
         </div>
+    </section>
 
-        <div class="section" id="spec">
+    <section class="page" id="storage" role="tabpanel">
+        <div class="section">
+            <h2>การจัดเก็บ & อุปกรณ์</h2>
+            <p>ออกแบบช่องภายในให้พร้อมทำงานทันที เก็บโน้ตบุ๊ก แท็บเล็ต และแก็ดเจ็ตแยกชัด ปกป้องด้วยฟองน้ำกันกระแทก</p>
+            <div class="grid">
+                <div class="card">
+                    <img src="https://d1nymbkeomeoqg.cloudfront.net/photos/30/9/422429_12461_L2.jpg" alt="ชั้นเก็บอุปกรณ์">
+                    <div class="card-body">ช่องโน้ตบุ๊ก 16" บุฟองน้ำ + สายรัด, ช่องแท็บเล็ต และซองแก็ดเจ็ตกันรอย</div>
+                </div>
+                <div class="card">
+                    <img src="https://paktbags.com/cdn/shop/files/22LDetails_Artboard22copy3-100_1576x.jpg?v=1717544314" alt="ช่องเก็บสายชาร์จ">
+                    <div class="card-body">ตาข่ายยืดแยกสายชาร์จ/อะแดปเตอร์, ซองซิปสำหรับฮาร์ดดิสก์ และสายรัดเก็บ power bank</div>
+                </div>
+            </div>
+            <ul class="steps" style="margin-top:16px;">
+                <li><div class="num">1</div>หยิบโน้ตบุ๊กจากช่องหลักได้ทันที แม้มีสายเสียบอยู่</li>
+                <li><div class="num">2</div>พอร์ตชาร์จนอกกระเป๋า เหมาะกับการนั่งทำงานบนรถ/เครื่องบิน</li>
+                <li><div class="num">3</div>มีช่องลับหลังสำหรับหนังสือเดินทาง/บัตร</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="page" id="design" role="tabpanel">
+        <div class="section">
+            <h2>ดีไซน์ & การเดินทาง</h2>
+            <p>วัสดุทนละอองน้ำ เคลือบกันฝุ่น เสริมฐานยางกันลื่น พร้อมซิปล็อกและสายรัดกระเป๋าเดินทาง</p>
+            <div class="grid">
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1509762774605-f07235a08f1f?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8YmFja3BhY2t8ZW58MHx8MHx8fDA%3D" alt="ดีไซน์กระเป๋า">
+                    <div class="card-body">ฐานกระเป๋าเสริมยาง กันขีดข่วนและกันลื่น วางกับพื้นได้มั่นใจ</div>
+                </div>
+                <div class="card">
+                    <img src="https://buffalojackson.com/cdn/shop/articles/rucksack-or-backpack-buffalo-jackson-blog-1.jpg?v=1601060389&width=1440" alt="เดินทาง">
+                    <div class="card-body">สายรัดหลังเสียบคันชักกระเป๋าเดินทาง + ช่องลับ RFID ปลอดภัยเวลาเดินทางต่างประเทศ</div>
+                </div>
+            </div>
+            <div class="promo-box" style="margin-top:18px;">
+                <div>
+                    🔥 11.11 Flash Deal: เหลือ 3,999 บาท (จาก 5,000) — ส่งฟรี EMS วันนี้
+                    <br><small>จำกัดสิทธิ์ 50 ใบแรก | ผ่อนชำระ 0% 3 เดือนผ่านบัตรที่รองรับ</small>
+                </div>
+                <a class="btn primary" href="#order">จองโปร</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="page" id="specs" role="tabpanel">
+        <div class="section">
             <h2>สเปกหลัก</h2>
             <p>ทุกอย่างที่ต้องรู้ก่อนตัดสินใจ</p>
             <div class="spec-grid">
@@ -497,26 +613,22 @@
                 <div class="spec"><strong>ข้อควรระวัง</strong><span>ไม่กันน้ำเต็มใบ หลีกเลี่ยงโดนน้ำโดยตรง</span></div>
             </div>
         </div>
+    </section>
 
-        <div class="promo-box">
-            <div>
-                🔥 11.11 Flash Deal: เหลือ 3,999 บาท (จาก 5,000) — ส่งฟรี EMS วันนี้
-                <br><small>จำกัดสิทธิ์ 50 ใบแรก | ผ่อนชำระ 0% 3 เดือนผ่านบัตรที่รองรับ</small>
-            </div>
-            <a class="btn primary" href="#order">จองโปร</a>
-        </div>
-
+    <section class="page" id="gallery" role="tabpanel">
         <div class="section">
             <h2>ภาพสินค้าเพิ่มเติม</h2>
             <p>ดูรายละเอียดวัสดุ ช่องใช้งาน และพอร์ตพลังงาน</p>
             <div class="gallery">
-                <img src="https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/13672761/DSC00825.jpg?quality=90&strip=all&crop=0.019999999999996%2C0%2C99.96%2C100&w=2400" alt="ภาพรวมกระเป๋า">
-                <img src="https://paktbags.com/cdn/shop/files/22LDetails_Artboard22copy3-100_1576x.jpg?v=1717544314" alt="ภายในกระเป๋า">
-                <img src="https://assets-production.mochithings.com/products/91219/photos/square_thumbnail_187651-travelus-mesh-pocket-backpack-13fcd0.jpg" alt="สายชาร์จและพอร์ต">
+                <img src="https://images.unsplash.com/photo-1509762774605-f07235a08f1f?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8YmFja3BhY2t8ZW58MHx8MHx8fDA%3D" alt="ภาพรวมกระเป๋า">
+                <img src="https://assets-production.mochithings.com/products/91219/photos/square_thumbnail_187651-travelus-mesh-pocket-backpack-13fcd0.jpg" alt="ภายในกระเป๋า">
+                <img src="https://cdn.shopify.com/s/files/1/0116/2015/5451/files/How_to_use_the_USB_port_built_in_the_backpack_2_480x480.webp?v=1649751607" alt="สายชาร์จและพอร์ต">
             </div>
         </div>
+    </section>
 
-        <div class="section" id="order">
+    <section class="page" id="order" role="tabpanel">
+        <div class="section">
             <h2>ขั้นตอนสั่งซื้อ</h2>
             <p>ยืนยันสต็อกทันที ทีมงานตอบกลับภายใน 5 นาทีในเวลาทำการ</p>
             <ul class="steps">
@@ -526,14 +638,56 @@
             </ul>
             <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:16px;">
                 <a class="btn primary" href="#">แอดไลน์เพื่อสั่งซื้อ</a>
-                <a class="btn ghost" href="#spec">เช็คสเปกอีกครั้ง</a>
+                <a class="btn ghost" href="#specs">เช็คสเปกอีกครั้ง</a>
             </div>
         </div>
-    </div>
-
-    <footer>
-        © 2025 Smart Backpack – Volt Pack 1 | ทีมซัพพอร์ตตอบแชททุกวัน 09.00-22.00 น.
-    </footer>
+        <footer>
+            © 2025 Smart Backpack – Volt Pack 1 | ทีมซัพพอร์ตตอบแชททุกวัน 09.00-22.00 น.
+        </footer>
+    </section>
 </div>
+
+<script>
+    const tabs = document.querySelectorAll('.page-tab');
+    const pages = document.querySelectorAll('.page');
+
+    const activatePage = (target) => {
+        let handled = false;
+        tabs.forEach(t => {
+            const isActive = t.dataset.target === target;
+            t.classList.toggle('active', isActive);
+            if (isActive) handled = true;
+        });
+        pages.forEach(page => page.classList.toggle('active', page.id === target));
+        const pageTop = document.querySelector(`#${target}`);
+        if (pageTop) pageTop.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        return handled;
+    };
+
+    const handleHash = () => {
+        const hash = window.location.hash.replace('#', '');
+        if (hash && document.getElementById(hash)) {
+            activatePage(hash);
+        }
+    };
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => activatePage(tab.dataset.target));
+    });
+
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+        link.addEventListener('click', (e) => {
+            const target = link.getAttribute('href').replace('#', '');
+            if (target && document.getElementById(target)) {
+                e.preventDefault();
+                activatePage(target);
+                history.replaceState(null, '', `#${target}`);
+            }
+        });
+    });
+
+    window.addEventListener('hashchange', handleHash);
+    handleHash();
+</script>
 </body>
 </html>
