@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>Smart Backpack – Volt Pack 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #060910;
+        --panel: #0c1220;
+        --card: #111a2a;
+        --muted: #a4b7d6;
+        --line: rgba(255,255,255,0.08);
+        --accent: #ffb300;
+        --accent-2: #38c1ff;
+        --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+        margin: 0;
+        font-family: 'Kanit', 'Space Grotesk', sans-serif;
+        background: radial-gradient(120% 120% at 20% 20%, rgba(56,193,255,0.10), transparent),
+                    radial-gradient(100% 100% at 80% 0%, rgba(255,179,0,0.14), transparent),
+                    linear-gradient(160deg, #070c16 0%, #090f19 35%, #060910 100%);
+        color: #f3f5f9;
+        min-height: 100vh;
+    }
+
+    .texture {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width=\"160\" height=\"160\" viewBox=\"0 0 160 160\"><path fill=\"rgba(255,255,255,0.02)\" d=\"M0 0h20v20H0z\"/></svg>');
+        opacity: 1;
+    }
+
+    .shell {
+        width: min(1180px, 92vw);
+        margin: 0 auto;
+        position: relative;
+        z-index: 2;
+    }
+
+    header.topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 18px 0 10px;
+        position: sticky;
+        top: 0;
+        background: linear-gradient(180deg, rgba(6,9,16,0.95) 0%, rgba(6,9,16,0.75) 100%);
+        backdrop-filter: blur(12px);
+        z-index: 10;
+    }
+
+    .brand {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        font-weight: 600;
+        letter-spacing: 0.4px;
+    }
+
+    .dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--accent), #ffd76a);
+        box-shadow: 0 0 16px rgba(255,179,0,0.6);
+    }
+
+    .pill {
+        padding: 8px 14px;
+        border-radius: 999px;
+        background: rgba(255,255,255,0.06);
+        border: 1px solid var(--line);
+        color: #fff;
+        font-size: 14px;
+    }
+
+    a.btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 13px 24px;
+        border-radius: 12px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, color 0.18s ease;
+        border: 1px solid transparent;
+    }
+
+    .btn.primary {
+        background: linear-gradient(120deg, var(--accent), #ffd76a);
+        color: #0c0c0c;
+        box-shadow: 0 12px 30px rgba(255,179,0,0.25);
+    }
+    .btn.primary:hover { transform: translateY(-2px) scale(1.01); }
+
+    .btn.ghost {
+        background: rgba(255,255,255,0.06);
+        border-color: var(--line);
+        color: #f3f5f9;
+    }
+    .btn.ghost:hover { background: rgba(255,255,255,0.12); transform: translateY(-2px); }
+
+    .hero {
+        position: relative;
+        padding: 60px 0 30px;
+    }
+
+    .hero::after {
+        content: "";
+        position: absolute;
+        inset: 8% 5% auto 30%;
+        height: 380px;
+        background: radial-gradient(circle, rgba(56,193,255,0.22) 0%, rgba(6,9,16,0) 55%);
+        filter: blur(40px);
+        z-index: 0;
+    }
+
+    .hero-inner {
+        position: relative;
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 30px;
+        align-items: stretch;
+    }
+
+    .hero-card {
+        background: linear-gradient(160deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        padding: 20px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.35);
+        backdrop-filter: blur(10px);
+    }
+
+    .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 12px;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        background: rgba(255,255,255,0.04);
+        color: var(--muted);
+        font-size: 14px;
+        letter-spacing: 0.3px;
+    }
+
+    h1 {
+        font-family: 'Space Grotesk', 'Kanit', sans-serif;
+        font-size: clamp(36px, 5vw, 52px);
+        margin: 16px 0 12px;
+        letter-spacing: -0.6px;
+    }
+
+    .lede {
+        color: #d7deea;
+        font-size: 18px;
+        line-height: 1.6;
+        max-width: 620px;
+        margin-bottom: 16px;
+    }
+
+    .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin: 14px 0 18px;
+    }
+
+    .chip {
+        padding: 8px 12px;
+        border-radius: 10px;
+        background: rgba(255,255,255,0.06);
+        border: 1px solid var(--line);
+        color: #f8f9fb;
+        font-size: 14px;
+    }
+
+    .cta-row { display: flex; gap: 12px; flex-wrap: wrap; margin: 6px 0 12px; }
+
+    .stat-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 12px;
+        margin-top: 18px;
+    }
+
+    .stat {
+        padding: 14px 16px;
+        border-radius: 12px;
+        background: rgba(255,255,255,0.04);
+        border: 1px solid var(--line);
+    }
+    .stat strong {
+        display: block;
+        font-size: 22px;
+        color: #fff;
+    }
+    .stat span { color: var(--muted); font-size: 14px; }
+
+    .hero-card .price-row {
+        display: flex;
+        align-items: baseline;
+        gap: 12px;
+        margin-bottom: 10px;
+    }
+    .hero-card .price {
+        font-size: 34px;
+        font-weight: 700;
+        color: #fff;
+    }
+    .hero-card .compare {
+        color: var(--muted);
+        text-decoration: line-through;
+        font-size: 18px;
+    }
+    .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 10px;
+        background: rgba(56,193,255,0.12);
+        color: #dff3ff;
+        border-radius: 10px;
+        border: 1px solid rgba(56,193,255,0.35);
+        font-size: 13px;
+    }
+
+    .hero-list {
+        margin: 14px 0 18px;
+        padding: 0;
+        list-style: none;
+        display: grid;
+        gap: 10px;
+    }
+    .hero-list li {
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+        padding: 10px 12px;
+        background: rgba(255,255,255,0.03);
+        border-radius: 10px;
+        border: 1px solid var(--line);
+        color: #e6ecf7;
+    }
+    .dot-small {
+        width: 9px;
+        height: 9px;
+        margin-top: 5px;
+        border-radius: 50%;
+        background: var(--accent);
+        flex-shrink: 0;
+    }
+
+    .sections {
+        display: grid;
+        gap: 24px;
+        margin: 30px 0 60px;
+    }
+
+    .section {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        padding: 26px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+    }
+
+    .section h2 {
+        margin: 0 0 8px;
+        font-size: 26px;
+        letter-spacing: -0.2px;
+    }
+    .section p { color: var(--muted); margin: 6px 0 18px; }
+
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 16px;
+    }
+
+    .card {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        overflow: hidden;
+        min-height: 100%;
+        display: grid;
+    }
+    .card img {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+    }
+    .card-body {
+        padding: 16px;
+        color: #e9edf6;
+        line-height: 1.5;
+    }
+
+    .spec-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 12px;
+        margin-top: 12px;
+    }
+    .spec {
+        padding: 14px 16px;
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        color: #e9edf6;
+    }
+    .spec span { display: block; color: var(--muted); font-size: 14px; }
+
+    .promo-box {
+        background: linear-gradient(110deg, rgba(255,179,0,0.18), rgba(56,193,255,0.18));
+        border: 1px solid rgba(255,179,0,0.4);
+        color: #0a0e18;
+        border-radius: var(--radius);
+        padding: 18px 20px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        box-shadow: 0 16px 38px rgba(255,179,0,0.24);
+    }
+    .promo-box small { color: #1c2437; font-weight: 500; }
+
+    .steps {
+        display: grid;
+        gap: 10px;
+        padding: 0;
+        margin: 12px 0 0;
+        list-style: none;
+    }
+    .steps li {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        padding: 12px 14px;
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        color: #e9edf6;
+    }
+    .steps .num {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: rgba(255,179,0,0.16);
+        border: 1px solid rgba(255,179,0,0.4);
+        color: #ffd76a;
+        display: grid;
+        place-items: center;
+        font-weight: 700;
+    }
+
+    .gallery {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 14px;
+        margin-top: 10px;
+    }
+    .gallery img {
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+        border-radius: 14px;
+        border: 1px solid var(--line);
+    }
+
+    footer {
+        text-align: center;
+        color: var(--muted);
+        padding: 24px 0 50px;
+        border-top: 1px solid var(--line);
+    }
+
+    @media (max-width: 960px) {
+        header.topbar { position: static; }
+        .hero-inner { grid-template-columns: 1fr; }
+        .hero-card { order: -1; }
+    }
+
+    @media (max-width: 640px) {
+        .shell { width: 94vw; }
+        .cta-row { flex-direction: column; }
+        .promo-box { flex-direction: column; align-items: flex-start; }
+    }
+</style>
+</head>
+<body>
+<div class="texture"></div>
+<div class="shell">
+    <header class="topbar">
+        <div class="brand">
+            <div class="dot"></div>
+            Volt Pack 1 – Smart Backpack
+        </div>
+        <div style="display:flex; gap:10px; align-items:center;">
+            <div class="pill">พร้อมจัดส่ง • รับประกัน 1 ปี</div>
+            <a class="btn ghost" href="#order">สั่งซื้อ</a>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-inner">
+            <div>
+                <span class="eyebrow">Power + Carry | รองรับชาร์จเร็ว</span>
+                <h1>Volt Pack 1 — กระเป๋าอัจฉริยะที่ชาร์จโน้ตบุ๊กได้จริง</h1>
+                <p class="lede">รวมพาวเวอร์แบงก์ 99Wh, ช่อง USB-C 100W x2, ที่ชาร์จไร้สาย Qi2 และดีไซน์ที่พร้อมทำงาน-เดินทาง ทุกสายชาร์จจัดระเบียบไว้ในตัวกระเป๋า</p>
+                <div class="tags">
+                    <span class="chip">แบตเตอรี่ LiPo 26,756 mAh (99Wh)</span>
+                    <span class="chip">USB-C 100W PD x2</span>
+                    <span class="chip">Qi2 Wireless 25W</span>
+                    <span class="chip">ผ่านด่านสนามบินได้</span>
+                </div>
+                <div class="cta-row">
+                    <a class="btn primary" href="#order">แอดไลน์เพื่อสั่งซื้อ</a>
+                    <a class="btn ghost" href="#spec">ดูสเปกทั้งหมด</a>
+                </div>
+                <div class="stat-grid">
+                    <div class="stat">
+                        <strong>99 Wh</strong>
+                        <span>ขึ้นเครื่องได้ ไม่ต้องโหลดใต้ท้อง</span>
+                    </div>
+                    <div class="stat">
+                        <strong>100W x2</strong>
+                        <span>จ่ายไฟโน้ตบุ๊ก + มือถือพร้อมกัน</span>
+                    </div>
+                    <div class="stat">
+                        <strong>Qi2 25W</strong>
+                        <span>ชาร์จไร้สาย แค่วางก็ชาร์จ</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-card">
+                <div class="price-row">
+                    <div class="price">3,999 บาท</div>
+                    <div class="compare">5,000</div>
+                    <span class="badge">🔥 11.11 Flash Deal</span>
+                </div>
+                <p style="color:#dfe6f5; margin: 6px 0 12px;">ส่งฟรี EMS / เก็บเงินปลายทางเพิ่ม 80 บาท / มีสต็อกพร้อมจัดส่ง</p>
+                <ul class="hero-list">
+                    <li><div class="dot-small"></div>สาย USB-C 240W พร้อมใช้งานในกล่อง</li>
+                    <li><div class="dot-small"></div>ช่องเก็บอุปกรณ์กันกระแทก + กัน RFID</li>
+                    <li><div class="dot-small"></div>ฐานกระเป๋าเสริมยาง กันลื่น กันขีดข่วน</li>
+                    <li><div class="dot-small"></div>พอร์ตภายนอกหยิบง่าย ไม่ต้องเปิดทั้งใบ</li>
+                </ul>
+                <a class="btn primary" href="#order">รับโปรตอนนี้</a>
+            </div>
+        </div>
+    </section>
+
+    <div class="sections">
+        <div class="section">
+            <h2>ภาพรวมการใช้งาน</h2>
+            <p>เน้นชาร์จจริง ใช้งานทุกวัน: เดินทาง ขึ้นเครื่อง ทำงานคาเฟ่ หรือประชุมลูกค้า Volt Pack 1 จ่ายไฟแรงแต่ยังผ่านข้อกำหนดสายการบิน</p>
+            <div class="grid">
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1504279577054-acfeccf8fc52?auto=format&fit=crop&w=1200&q=80" alt="ชั้นเก็บอุปกรณ์">
+                    <div class="card-body">ช่องเก็บอุปกรณ์บุฟองน้ำ แยกโน้ตบุ๊ก แท็บเล็ต สายชาร์จ และพาวเวอร์ พร้อมสาย USB-C 240W ในตัว</div>
+                </div>
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1200&q=80" alt="พอร์ต USB-C">
+                    <div class="card-body">USB-C 100W PD สองช่อง + PD 45/15W รวม 3 ช่อง จ่ายไฟเร็ว พอร์ตด้านนอกหยิบเสียบได้เลย</div>
+                </div>
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80" alt="ดีไซน์กระเป๋า">
+                    <div class="card-body">ผ้าทนละอองน้ำ เคลือบกันฝุ่น ฐานกันลื่น ซิปกันขโมย + ช่องลับหลัง พร้อมสายรัดเดินทาง</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="spec">
+            <h2>สเปกหลัก</h2>
+            <p>ทุกอย่างที่ต้องรู้ก่อนตัดสินใจ</p>
+            <div class="spec-grid">
+                <div class="spec"><strong>แบตเตอรี่</strong><span>LiPo 26,756 mAh (99Wh)</span></div>
+                <div class="spec"><strong>Output</strong><span>USB-C 100W x2, 45W/15W รวม 3 ช่อง</span></div>
+                <div class="spec"><strong>Input</strong><span>USB-C PD + Wireless Qi2 25W</span></div>
+                <div class="spec"><strong>น้ำหนัก</strong><span>1.35 กก. (รวมแบต)</span></div>
+                <div class="spec"><strong>วัสดุ</strong><span>ผ้าโพลีเสริมโครง PE, กันละอองน้ำ</span></div>
+                <div class="spec"><strong>ขนาด</strong><span>30 x 18 x 46 ซม. (16")</span></div>
+                <div class="spec"><strong>ความปลอดภัย</strong><span>ชิปตัดไฟ, กันสัญญาณ RFID, ซิปล็อก</span></div>
+                <div class="spec"><strong>ข้อควรระวัง</strong><span>ไม่กันน้ำเต็มใบ หลีกเลี่ยงโดนน้ำโดยตรง</span></div>
+            </div>
+        </div>
+
+        <div class="promo-box">
+            <div>
+                🔥 11.11 Flash Deal: เหลือ 3,999 บาท (จาก 5,000) — ส่งฟรี EMS วันนี้
+                <br><small>จำกัดสิทธิ์ 50 ใบแรก | ผ่อนชำระ 0% 3 เดือนผ่านบัตรที่รองรับ</small>
+            </div>
+            <a class="btn primary" href="#order">จองโปร</a>
+        </div>
+
+        <div class="section">
+            <h2>ภาพสินค้าเพิ่มเติม</h2>
+            <p>ดูรายละเอียดวัสดุ ช่องใช้งาน และพอร์ตพลังงาน</p>
+            <div class="gallery">
+                <img src="https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=1200&q=80" alt="ภาพรวมกระเป๋า">
+                <img src="https://images.unsplash.com/photo-1489515217757-5fd1be406fef?q=80&w=1200" alt="ภายในกระเป๋า">
+                <img src="https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=1200" alt="สายชาร์จและพอร์ต">
+            </div>
+        </div>
+
+        <div class="section" id="order">
+            <h2>ขั้นตอนสั่งซื้อ</h2>
+            <p>ยืนยันสต็อกทันที ทีมงานตอบกลับภายใน 5 นาทีในเวลาทำการ</p>
+            <ul class="steps">
+                <li><div class="num">1</div>กดปุ่ม “แอดไลน์เพื่อสั่งซื้อ”</li>
+                <li><div class="num">2</div>ส่งสีที่ต้องการ + ชื่อ/ที่อยู่จัดส่ง</li>
+                <li><div class="num">3</div>เลือกชำระโอน/บัตร หรือเก็บเงินปลายทาง</li>
+            </ul>
+            <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:16px;">
+                <a class="btn primary" href="#">แอดไลน์เพื่อสั่งซื้อ</a>
+                <a class="btn ghost" href="#spec">เช็คสเปกอีกครั้ง</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        © 2025 Smart Backpack – Volt Pack 1 | ทีมซัพพอร์ตตอบแชททุกวัน 09.00-22.00 น.
+    </footer>
+</div>
+</body>
+</html>
